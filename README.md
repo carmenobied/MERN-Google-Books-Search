@@ -1,5 +1,4 @@
 # React-Google-Books-Search
-React Google Books Search App
 
 ![Project license badge](https://img.shields.io/badge/license-MIT-brightgreen)
 
@@ -16,8 +15,8 @@ The goal was to create a new React-based Google Books Search app. On the fronten
 
 ## User Story
 ```
-As a user, I WANT to be able to view my entire employee directory at once,
-SO THAT I have quick access to their information.
+As a user, I WANT to be able to query and display searched books,
+AND I WANT to be able to save books to review and purchase later.
 ```
 
 ## Installation
