@@ -1,5 +1,13 @@
 const router = require("express").Router();
 const booksController = require("../../controllers/booksController");
+const { query } = require("express");
+
+const BASEURL = "https://www.googleapis.com/books/v1/volumes?q="
+const APIKEY = process.env.GOOGLE_APIKEY || "didn't work"
+
+// Search for books via Google Books API
+router.router("/api/books/search/")
+  .get(BASEURL + query.title + APIKEY);
 
 // Matches with "/api/books"
 router.route("/")
