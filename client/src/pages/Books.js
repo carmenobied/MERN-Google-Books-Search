@@ -6,8 +6,12 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
+// import Button from "@material-ui/core/Button";
+// import Container from "../components/Layout/container";
+// import Wrapper from "../components/Layout/wrapper";
+// import BookCard from "../components/Card";
 
-function Books() {
+const Books = () => {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
@@ -18,7 +22,7 @@ function Books() {
   }, [])
 
   // Loads all books and sets them to books
-  function loadBooks() {
+  const loadBooks = () => {
     API.getBooks()
       .then(res => 
         setBooks(res.data)
@@ -27,21 +31,21 @@ function Books() {
   };
 
   // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
+  const deleteBook = id => {
     API.deleteBook(id)
       .then(res => loadBooks())
       .catch(err => console.log(err));
   }
 
   // Handles updating component state when the user types into the input field
-  function handleInputChange(event) {
+  const handleInputChange = event => {
     const { name, value } = event.target;
     setFormObject({...formObject, [name]: value})
   };
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
-  function handleFormSubmit(event) {
+  const handleFormSubmit = event => {
     event.preventDefault();
     if (formObject.title && formObject.author) {
       API.saveBook({
@@ -110,6 +114,5 @@ function Books() {
       </Container>
     );
   }
-
 
 export default Books;
