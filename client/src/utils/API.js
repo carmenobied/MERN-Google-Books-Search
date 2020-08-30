@@ -1,12 +1,12 @@
 import axios from "axios";
 // const APIKEY = ""; 
-const URL = "https://www.googleapis.com/books/v1/volumes?q=";
+// const URL = "https://www.googleapis.com/books/v1/volumes?q=";
 
 export default {
   // Search for books
   searchBooks: (query) => {
     //console.log(query);
-    return axios.get(URL + query + APIKEY);
+    return axios.get(URL + query);
   },
   // Saves a book to the database
   saveBook: function(bookData) {

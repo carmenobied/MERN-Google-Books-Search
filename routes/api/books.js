@@ -3,7 +3,7 @@ const booksController = require("../../controllers/booksController");
 
 // Search for books via Google Books API
 router.router("/api/books/search/")
-  .get(BASEURL + query.title + APIKEY);
+  .get(BASEURL + query.title);
 
 // Matches with "/api/books"
 router.route("/")
