@@ -1,10 +1,10 @@
 import React from "react";
 
-function Nav() {
+const Nav = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <a className="navbar-brand" href="/">
-        React Reading List
+        Navigating by Stories: React Google Books Search
       </a>
     </nav>
   );

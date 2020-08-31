@@ -7,7 +7,7 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
 
-const Books = () => {
+const Search = () => {
   // Setting our component's initial state
   const [books, setBooks] = useState([])
   const [formObject, setFormObject] = useState({})
@@ -47,7 +47,9 @@ const Books = () => {
       API.saveBook({
         title: formObject.title,
         author: formObject.author,
-        synopsis: formObject.synopsis
+        description: formObject.description,
+        image: formObject.image,
+        link: formObject.link
       })
         .then(res => loadBooks())
         .catch(err => console.log(err));
@@ -59,7 +61,7 @@ const Books = () => {
         <Row>
           <Col size="md-6">
             <Jumbotron>
-              <h1>What Books Should I Read?</h1>
+              <h1>Search New Books To Explore</h1>
             </Jumbotron>
             <form>
               <Input
@@ -72,22 +74,17 @@ const Books = () => {
                 name="author"
                 placeholder="Author (required)"
               />
-              <TextArea
-                onChange={handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
               <FormBtn
                 disabled={!(formObject.author && formObject.title)}
                 onClick={handleFormSubmit}
               >
-                Submit Book
+                Search a Book
               </FormBtn>
             </form>
           </Col>
           <Col size="md-6 sm-12">
             <Jumbotron>
-              <h1>Books On My List</h1>
+              <h1>Saved Books On My List</h1>
             </Jumbotron>
             {books.length ? (
               <List>
@@ -111,4 +108,4 @@ const Books = () => {
     );
   }
 
-export default Books;
+export default Search;
