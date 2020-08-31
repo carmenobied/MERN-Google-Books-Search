@@ -4,9 +4,12 @@
 
 The goal was to create a new React-based Google Books Search app. On the frontend, this involved creating React components, working with helper/util functions, and utilizing React lifecycle methods to query and display books based on user searches. On the server side, it also involved using Node, Express and MongoDB so that users can save books to review or purchase later.
 
+Explore the application here: [Live App](https://navigating-by-stories.herokuapp.com/)
+
 # Table of Contents
   * [User Story](#User-Story)
   * [Installation](#Installation)
+  * [Deployed](#Deployed)
   * [Usage](#Usage)
   * [Contributing](#Contributing)
   * [License](#License)
@@ -27,6 +30,12 @@ iii. Run the command-lines to run the app functionality. You can also access the
 iv. 1. npm install // 2. npm start
 v. Explore the app.
 ```
+## Deployed
+Deployed application in Heroku: [Live App](https://navigating-by-stories.herokuapp.com/)
+
+* Below is screenshot of the application:
+![Google Books Search App Screenshot](./assets/screenshot_GoogleBooksSearch.png)
+
 ## Usage
 ```
 Technologies Used:
