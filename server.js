@@ -13,11 +13,18 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
+
+// Serve up static assets
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 // Add routes, both API and view
 app.use(routes);
 
 // Connect to the MongoDB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/booksDB");
+
 
 // Start the API server
 app.listen(PORT, () => {
