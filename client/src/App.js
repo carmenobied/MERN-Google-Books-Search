@@ -15,7 +15,7 @@ const App = () => (
           <Route exact path={["/", "/search"]}>
             <Search />
           </Route>
-          <Route exact path="/api/books">
+          <Route exact path="/books">
             <Saved />
           </Route>
           <Route>
