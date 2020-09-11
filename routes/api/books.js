@@ -2,7 +2,7 @@ const router = require("express").Router();
 const booksController = require("../../controllers/booksController");
 
 // Search for books via Google Books API
-router.router("/api/books/search/")
+router.route("/api/books/search/")
   .get(BASEURL + query.title);
 
 // Matches with "/api/books"
