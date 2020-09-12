@@ -5,7 +5,7 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { Input, FormBtn } from "../components/Form";
 
 const Search = () => {
   // Setting our component's initial state
@@ -15,14 +15,15 @@ const Search = () => {
   // Load all books and store them with setBooks
   useEffect(() => {
     loadBooks()
+    console.log([books]);
   }, [])
 
   // Loads all books and sets them to books
   const loadBooks = () => {
     API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
+      .then(res =>    
+        setBooks(res.data) 
+      ) 
       .catch(err => console.log(err));
   };
 
@@ -75,7 +76,7 @@ const Search = () => {
                 placeholder="Author (required)"
               />
               <FormBtn
-                disabled={!(formObject.author && formObject.title)}
+                disabled={!(formObject.title && formObject.author)}
                 onClick={handleFormSubmit}
               >
                 Search a Book

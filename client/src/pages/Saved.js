@@ -30,9 +30,12 @@ const Saved = props => {
         <Row>
           <Col size="md-10 md-offset-1">
             <article>
-              <h1>Synopsis</h1>
+              <h1>Book Description</h1>
               <p>
-                {book.synopsis}
+                {book.description}
+                {book.description}
+                {book.link}
+
               </p>
             </article>
           </Col>
