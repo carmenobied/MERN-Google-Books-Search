@@ -20,7 +20,7 @@ export const TextArea = props => {
 
 export const FormBtn = props => {
   return (
-    <button {...props} style={{ float: "right", marginBottom: 10 }} className="btn btn-success">
+    <button {...props} style={{ float: "right", marginBottom: 10 }} className="btn btn-dark">
       {props.children}
     </button>
   );
