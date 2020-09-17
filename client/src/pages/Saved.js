@@ -1,53 +1,104 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
-import Jumbotron from "../components/Jumbotron";
-import API from "../utils/API";
+import API from "../utils/API"
 
-const Saved = props => {
-  const [book, setBook] = useState({})
+const Saved = () => {
+  // Setting our component's initial state
+  const [books, setBooks] = useState([]);
 
-  // When this component mounts, grab the book with the _id of props.match.params.id
-  // e.g. localhost:3000/books/599dcb67f0f16317844583fc
-  const {id} = useParams()
-  useEffect(() => {
-    API.getBook(id)
-      .then(res => setBook(res.data))
-      .catch(err => console.log(err));
-  }, [])
 
-  return (
-      <Container fluid>
-        <Row>
-          <Col size="md-12">
-            <Jumbotron>
-              <h1>
-                {book.title} by {book.author}
-              </h1>
-            </Jumbotron>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-10 md-offset-1">
-            <article>
-              <h1>Book Description</h1>
-              <p>
-                {book.description}
-                {book.description}
-                {book.link}
-
-              </p>
-            </article>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-2">
-            <Link to="/">← Back to Authors</Link>
-          </Col>
-        </Row>
-      </Container>
-    );
+  // Loads all saved books and sets them to books
+  const loadSavedBooks = async () => {
+      try {
+          const saved = await API.getSavedBooks();
+          setBooks(saved.data);
+      } catch (err) {
+          throw err;
+      }
   }
 
+  // Loads all books
+  useEffect(() => {
+      loadSavedBooks();
+  }, [books]);
+
+   // Deletes a book from the database with a given id, then reloads books from the db
+  const handleDeleteBook = async (id) => {
+      try {
+          await API.deleteBook(id)
+          const savedBooks = books.filter(book => book.id !== id);
+          setBooks(savedBooks);
+      } catch (err) {
+          throw err;
+      }
+  }
+
+  return (
+    <Container fluid>
+      <Col size="md-2">
+            <Link to="/">← Back to Authors</Link>
+          </Col>
+      <Row>
+        {books.length ? (
+          <div
+            className='row row-cols-3'
+            style={{ justifyContent: 'center' }}
+          >
+            {books.map((book) => {
+              return (
+                <div
+                  key={book._id}
+                  className='card col-sm-3'
+                  style={{ margin: '5px' }}
+                >
+                  <img
+                    src={
+                      book.image
+                        ? book.image
+                        : 'http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/book-icon.png'
+                    }
+                    className='card-img-top'
+                    style={{ height: 300 }}
+                    alt='...'
+                  ></img>
+                  <div className='card-body'>
+                    <h5 className='card-title'>{book.title}</h5>
+                    <p className='card-text'>
+                      {book.description
+                        ? book.description.length >= 200
+                          ? book.description.slice(0, 200)
+                          : book.description
+                        : 'No Description Available'}
+                    </p>
+                    <button
+                      className='btn btn-dark'
+                      onClick={() => handleDeleteBook(book._id)}
+                    >
+                      Delete
+                    </button>
+                    <a
+                      href={book.link}
+                      rel='noopener noreferrer'
+                      target={'_blank'}
+                      className='card-link'
+                      style={{ padding: '20px', textAlign: 'center' }}
+                    >
+                      Book Link
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <h3>No Results to Display</h3>
+          </div>
+        )}
+      </Row>
+    </Container>
+  );
+}
 
 export default Saved;

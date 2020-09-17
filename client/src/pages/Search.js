@@ -1,112 +1,127 @@
-import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
-import Jumbotron from "../components/Jumbotron";
+import React, { useState } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
+import { Row, Container } from "../components/Grid";
 import { Input, FormBtn } from "../components/Form";
 
 const Search = () => {
   // Setting our component's initial state
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
-
-  // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-    console.log([books]);
-  }, [])
-
-  // Loads all books and sets them to books
-  const loadBooks = () => {
-    API.getBooks()
-      .then(res =>    
-        setBooks(res.data) 
-      ) 
-      .catch(err => console.log(err));
-  };
-
-  // Deletes a book from the database with a given id, then reloads books from the db
-  const deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
+  const [books, setBooks] = useState([]);
+  const [searchBook, setSearchBook] = useState("");
 
   // Handles updating component state when the user types into the input field
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
+  const handleInputChange = e => {
+    const { value } = e.target;
+    setSearchBook(value);
   };
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
-  const handleFormSubmit = event => {
-    event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        description: formObject.description,
-        image: formObject.image,
-        link: formObject.link
+  const handleFormSubmit = e => {
+    e.preventDefault();
+    API.getBooks(searchBook)
+      .then((res) => {
+        setBooks(res.data.items);
       })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
+      .catch((err) => console.log(err));
+  };
+  
+  const handleSaveBook = (e, data) => {
+    e.preventDefault();
+
+    API.saveBook(data)
+      .then((res) => alert("Book Saved!"))
+      .catch((err) => console.log(err));
   };
 
-    return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>Search New Books To Explore</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                onChange={handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                onChange={handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <FormBtn
-                disabled={!(formObject.title && formObject.author)}
-                onClick={handleFormSubmit}
-              >
-                Search a Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Saved Books On My List</h1>
-            </Jumbotron>
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
+  return (
+    <Container>
+      <Row>
+        <Container fluid>
+          <h3>Book Search</h3>
+          <Input
+            placeholder="Search Google Books"
+            onChange={handleInputChange}
+          />
+          <FormBtn onClick={handleFormSubmit}>Search</FormBtn>
+        </Container>
+      </Row>
+      <Row>
+        <Container>
+          {books.length ? (
+            <div
+              className="row row-cols-3"
+              style={{ justifyContent: "center" }}
+            >
+              {books.map((book) => {
+                return (
+                  <div
+                    key={book.id}
+                    className="card col-sm-3"
+                    style={{ margin: "5px" }}
+                  >
+                    <img
+                      src={
+                        book.volumeInfo.imageLinks
+                          ? book.volumeInfo.imageLinks.thumbnail
+                          : "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/book-icon.png"
+                      }
+                      className="card-img-top"
+                      style={{ height: 300 }}
+                      alt="..."
+                    ></img>
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        {book.volumeInfo.title}
+                      </h5>
+                      <p className="card-text">
+                        {book.volumeInfo.description
+                          ? book.volumeInfo.description.length >=
+                            200
+                            ? book.volumeInfo.description.slice(
+                              0,
+                              200
+                            )
+                            : book.volumeInfo.description
+                          : "No Description Available"}
+                      </p>
+                      <button
+                        className="btn btn-dark"
+                        onClick={(e) =>
+                          handleSaveBook(e, {
+                            title: book.volumeInfo.title,
+                            image: book.volumeInfo.imageLinks
+                              ? book.volumeInfo.imageLinks
+                                .thumbnail
+                              : "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/book-icon.png",
+                            author: book.volumeInfo.authors[0],
+                            description:
+                              book.volumeInfo.description,
+                            link: book.volumeInfo.infoLink,
+                          })
+                        }
+                      >
+                        save
+                        </button>
+                      <a
+                        href={book.volumeInfo.infoLink}
+                        rel="noopener noreferrer"
+                        target={"_blank"}
+                        className="card-link"
+                        style={{ padding: '20px', textAlign: 'center' }}
+                      >
+                        Book Link
+                        </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
               <h3>No Results to Display</h3>
             )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
+        </Container>
+      </Row>
+    </Container>
+  );
+};
 export default Search;
